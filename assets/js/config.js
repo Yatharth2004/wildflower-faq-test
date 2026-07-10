@@ -1,0 +1,88 @@
+/**
+ * ============================================================
+ *  WILDFLOWER FAQ TEST — CONFIGURATION FILE
+ *  The Oberoi Centre of Learning & Development (OCLD)
+ * ------------------------------------------------------------
+ *  Everything that controls how the exam behaves lives here.
+ *  Change values in this file only — never edit app logic
+ *  in the other JS files to change exam behaviour.
+ * ============================================================
+ */
+
+const CONFIG = {
+
+  // ---------- BRANDING ----------
+  examTitle: "WILDFLOWER FAQ TEST",
+  examSubtitle: "The Oberoi Centre of Learning & Development",
+  examTagline: "Knowledge Assessment Portal",
+  organizationName: "Wildflower Hall, An Oberoi Resort",
+  logoUrl: "assets/img/logo-placeholder.svg",
+  heroImageUrl: "assets/img/hero-placeholder.svg",
+
+  // ---------- GOOGLE APPS SCRIPT BACKEND ----------
+  // Paste the deployed Web App URL from Google Apps Script here.
+  // See gas/README inside the gas/ folder for deployment steps.
+  APPS_SCRIPT_URL: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
+
+  // ---------- EXAM SETTINGS ----------
+  totalQuestions: 50,
+  totalMarks: 100,
+  marksPerQuestion: 2,
+  negativeMarking: false,
+  negativeMarksPerQuestion: 0,
+  durationMinutes: 30,
+  autoSubmit: true,
+  passingPercentage: 100,   // Only a perfect score passes
+  maxAttempts: 3,
+
+  // Difficulty distribution per attempt (must sum to totalQuestions)
+  difficultyDistribution: {
+    Easy: 20,
+    Medium: 20,
+    Difficult: 10
+  },
+
+  // Maximum allowed overlap of questions between two attempts by the
+  // same candidate, expressed as a fraction (0.2 = 20%)
+  maxQuestionOverlap: 0.2,
+
+  // ---------- ADMIN ----------
+  // Change this before deploying. For real production use, prefer
+  // setting the password as an Apps Script property instead (see gas/Code.gs).
+  adminPassword: "OCLD@Wildflower2026",
+
+  // ---------- DEPARTMENTS ----------
+  departments: [
+    "Front Office",
+    "Housekeeping",
+    "Food & Beverage Service",
+    "Food Production",
+    "Engineering",
+    "Security",
+    "Human Resources",
+    "Finance",
+    "Purchase",
+    "Stores",
+    "Spa",
+    "Recreation",
+    "Sales & Marketing",
+    "Learning & Development",
+    "Kitchen Stewarding",
+    "Horticulture",
+    "Other"
+  ],
+
+  // ---------- MESSAGES ----------
+  messages: {
+    declaration: "I confirm that I will attempt this examination honestly.",
+    attemptsExhausted: "You have already used all three attempts for the WILDFLOWER FAQ TEST. Please contact the Learning & Development Department.",
+    passMessage: "Congratulations! You have successfully passed the WILDFLOWER FAQ TEST. You are now eligible for the next stage of the OCLD selection process.",
+    failMessage: "Unfortunately, you did not achieve the required score of 100%. If attempts remain, you may attempt the examination again."
+  }
+};
+
+// Freeze so exam logic files cannot accidentally mutate configuration at runtime
+Object.freeze(CONFIG);
+Object.freeze(CONFIG.difficultyDistribution);
+Object.freeze(CONFIG.departments);
+Object.freeze(CONFIG.messages);

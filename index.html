@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>WILDFLOWER FAQ TEST | OCLD Knowledge Assessment Portal</title>
+<meta name="description" content="Official knowledge assessment portal for The Oberoi Centre of Learning & Development — Wildflower Hall, An Oberoi Resort." />
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ============ BRAND BAR ============ -->
+  <div class="brandbar no-print">
+    <div class="brand">
+      <div class="logo-mark">WH</div>
+      <div class="brand-text">
+        <div class="org">Wildflower Hall · An Oberoi Resort</div>
+        <div class="name">WILDFLOWER FAQ TEST</div>
+      </div>
+    </div>
+    <div id="attemptPill" class="pill hidden"></div>
+  </div>
+
+  <!-- ============ SCREEN 1 : LANDING ============ -->
+  <section id="screen-landing" class="screen active">
+    <div class="hero">
+      <div class="crest">WH</div>
+      <span class="eyebrow">Official Recruitment Examination</span>
+      <h1>WILDFLOWER FAQ TEST</h1>
+      <div class="sub">The Oberoi Centre of Learning &amp; Development</div>
+      <div class="tag">Knowledge Assessment Portal</div>
+      <p class="hero-desc">
+        Welcome to the mandatory first screening stage for all OCLD applicants at
+        Wildflower Hall. This examination evaluates your knowledge of the Orientation
+        Manual. Only candidates who achieve a perfect score become eligible for the
+        next stage of recruitment.
+      </p>
+      <button class="btn btn-ghost" id="btnScrollInstructions">View Instructions ↓</button>
+    </div>
+
+    <div class="glass-card" style="margin-top:28px;">
+      <span class="eyebrow">Before you begin</span>
+      <h2>Examination Instructions</h2>
+      <p>Please read the following rules carefully. By starting this examination you agree to abide by them in full.</p>
+
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="num">1</div>
+          <h4>50 Questions</h4>
+          <p>Randomly selected from a large question bank covering the entire Orientation Manual.</p>
+        </div>
+        <div class="rule-card">
+          <div class="num">2</div>
+          <h4>30 Minutes</h4>
+          <p>The exam auto-submits when time runs out. A live countdown is always visible.</p>
+        </div>
+        <div class="rule-card">
+          <div class="num">3</div>
+          <h4>100 Marks Total</h4>
+          <p>2 marks per question. There is no negative marking for wrong answers.</p>
+        </div>
+        <div class="rule-card">
+          <div class="num">4</div>
+          <h4>100% to Pass</h4>
+          <p>Only a perfect score of 100/100 qualifies you for the next recruitment stage.</p>
+        </div>
+        <div class="rule-card">
+          <div class="num">5</div>
+          <h4>3 Attempts Maximum</h4>
+          <p>Tracked by Employee ID, Email and a unique Candidate ID. Passing disables further attempts.</p>
+        </div>
+        <div class="rule-card">
+          <div class="num">6</div>
+          <h4>Stay On This Tab</h4>
+          <p>Refreshing or closing the tab mid-exam may cause loss of progress. A warning will appear if you try.</p>
+        </div>
+      </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="declarationCheck" />
+        <label for="declarationCheck">I confirm that I will attempt this examination honestly.</label>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="btnStartExam" disabled>Start Exam →</button>
+    </div>
+
+    <p class="footer-note">© Wildflower Hall, An Oberoi Resort · The Oberoi Centre of Learning &amp; Development</p>
+  </section>
+
+  <!-- ============ SCREEN 2 : REGISTRATION ============ -->
+  <section id="screen-registration" class="screen">
+    <div class="glass-card">
+      <span class="eyebrow">Step 1 of 2</span>
+      <h2>Candidate Registration</h2>
+      <p>All fields marked <span class="req">*</span> are mandatory. Please ensure your details are accurate — they will appear on your official result record.</p>
+
+      <div id="regAlertBox"></div>
+
+      <form id="registrationForm" novalidate>
+        <div class="form-grid">
+          <div class="field">
+            <label for="fullName">Full Name <span class="req">*</span></label>
+            <input type="text" id="fullName" autocomplete="name" required />
+            <div class="error-msg" id="err-fullName"></div>
+          </div>
+          <div class="field">
+            <label for="email">Official Email Address <span class="req">*</span></label>
+            <input type="email" id="email" autocomplete="email" required />
+            <div class="error-msg" id="err-email"></div>
+          </div>
+          <div class="field">
+            <label for="phone">Mobile Number <span class="req">*</span></label>
+            <input type="tel" id="phone" autocomplete="tel" placeholder="10-digit mobile number" required />
+            <div class="error-msg" id="err-phone"></div>
+          </div>
+          <div class="field">
+            <label for="employeeId">Employee ID <span class="req">*</span></label>
+            <input type="text" id="employeeId" required />
+            <div class="error-msg" id="err-employeeId"></div>
+          </div>
+          <div class="field">
+            <label for="department">Department <span class="req">*</span></label>
+            <select id="department" required>
+              <option value="">Select department</option>
+            </select>
+            <div class="error-msg" id="err-department"></div>
+          </div>
+          <div class="field">
+            <label for="designation">Designation <span style="color:var(--charcoal-soft); font-weight:400;">(optional)</span></label>
+            <input type="text" id="designation" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top:28px;" id="btnRegisterSubmit">
+          Continue to Examination →
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 3 : PRE-EXAM CHECK ============ -->
+  <section id="screen-precheck" class="screen">
+    <div class="glass-card" style="text-align:center;">
+      <span class="eyebrow">Step 2 of 2</span>
+      <h2 id="precheckName">Welcome</h2>
+      <div id="attemptBadgesWrap" class="attempt-badges" style="justify-content:center;"></div>
+      <div id="precheckAlert"></div>
+      <p style="max-width:480px; margin:14px auto 26px;">
+        You are about to begin Attempt <strong id="precheckAttemptNo">1</strong> of 3.
+        Once started, the 30-minute timer cannot be paused. Ensure you are in a quiet
+        place with a stable internet connection before proceeding.
+      </p>
+      <button class="btn btn-primary" id="btnBeginExam">Begin Examination →</button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 4 : EXAM ENGINE ============ -->
+  <section id="screen-exam" class="screen">
+    <div class="exam-topbar">
+      <div>
+        <div class="timer" id="timerDisplay">30:00</div>
+        <div class="meta">Attempt <span id="examAttemptNo">1</span> of 3</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="meta"><span id="answeredCount">0</span> of 50 answered</div>
+      </div>
+      <button class="btn btn-danger btn-sm" id="btnSubmitTop">Submit Exam</button>
+    </div>
+
+    <div class="exam-layout">
+      <div class="glass-card question-panel">
+        <div class="q-head">
+          <span class="q-number">Question <span id="qCurrentNum">1</span> of 50</span>
+          <span class="q-topic" id="qTopic">Topic</span>
+        </div>
+        <div class="q-text" id="qText">Loading question…</div>
+        <div class="option-list" id="optionList"></div>
+
+        <div class="exam-controls">
+          <div class="left-group">
+            <button class="btn btn-outline btn-sm" id="btnPrev">← Previous</button>
+            <button class="btn btn-outline btn-sm" id="btnMarkReview">Mark for Review</button>
+          </div>
+          <div class="right-group">
+            <button class="btn btn-outline btn-sm" id="btnClear">Clear Response</button>
+            <button class="btn btn-primary btn-sm" id="btnNext">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card navigator no-print">
+        <h4>Question Navigator</h4>
+        <div class="nav-grid" id="navGrid"></div>
+        <div class="nav-legend">
+          <div class="item"><span class="legend-dot" style="background:var(--green-deep);"></span> Answered</div>
+          <div class="item"><span class="legend-dot" style="background:var(--gold);"></span> Marked for Review</div>
+          <div class="item"><span class="legend-dot" style="background:var(--white); border:1.5px solid rgba(31,58,46,0.15);"></span> Not Answered</div>
+        </div>
+        <div class="nav-stats">
+          <div class="row"><span>Answered</span><strong id="statAnswered">0</strong></div>
+          <div class="row"><span>Marked</span><strong id="statMarked">0</strong></div>
+          <div class="row"><span>Remaining</span><strong id="statRemaining">50</strong></div>
+        </div>
+        <button class="btn btn-danger btn-block btn-sm" id="btnSubmitSide" style="margin-top:18px;">Submit Exam</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 5 : RESULT ============ -->
+  <section id="screen-result" class="screen">
+    <div class="glass-card result-hero">
+      <div id="resultBadge" class="result-badge pass">PASS</div>
+      <div class="result-score"><span id="resultMarks">0</span><span>/100</span></div>
+      <p id="resultPercentLabel" style="font-weight:700; color:var(--green-deep);">0% Score</p>
+      <div id="resultMessage" style="max-width:520px; margin:0 auto;"></div>
+    </div>
+
+    <div class="glass-card" style="margin-top:22px;">
+      <h3>Result Summary</h3>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="val" id="statCorrect">0</div><div class="lab">Correct</div></div>
+        <div class="stat-card"><div class="val" id="statWrong">0</div><div class="lab">Wrong</div></div>
+        <div class="stat-card"><div class="val" id="statUnanswered">0</div><div class="lab">Unanswered</div></div>
+        <div class="stat-card"><div class="val" id="statTime">--</div><div class="lab">Time Taken</div></div>
+      </div>
+
+      <table class="detail-table">
+        <tr><td>Candidate Name</td><td id="dCandidateName">-</td></tr>
+        <tr><td>Employee ID</td><td id="dEmployeeId">-</td></tr>
+        <tr><td>Department</td><td id="dDepartment">-</td></tr>
+        <tr><td>Attempt Number</td><td id="dAttempt">-</td></tr>
+        <tr><td>Submission Time</td><td id="dSubmission">-</td></tr>
+      </table>
+
+      <div id="remainingAttemptsNote" style="margin-top:20px;"></div>
+      <div class="no-print" style="margin-top:24px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="window.print()">Print Result</button>
+        <button class="btn btn-primary hidden" id="btnRetakeExam">Retake Examination</button>
+      </div>
+    </div>
+    <p class="footer-note">© Wildflower Hall, An Oberoi Resort · The Oberoi Centre of Learning &amp; Development</p>
+  </section>
+
+  <!-- ============ FULL PAGE LOADER ============ -->
+  <div id="globalLoader" class="center-loading hidden">
+    <div class="loader"></div>
+    <p id="loaderText">Loading…</p>
+  </div>
+
+</div>
+
+<div id="fullscreenWarning" class="fullscreen-warning hidden">
+  <h2 style="color:var(--gold-light);">Please Return to the Exam</h2>
+  <p style="max-width:420px; color:var(--cream-deep);">You navigated away from the exam window. Switching tabs or apps during the examination is discouraged. Click below to resume.</p>
+  <button class="btn btn-primary" id="btnResumeExam" style="margin-top:16px;">Resume Exam</button>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/questions.js"></script>
+<script src="assets/js/storage.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/registration.js"></script>
+<script src="assets/js/exam-engine.js"></script>
+<script src="assets/js/results.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

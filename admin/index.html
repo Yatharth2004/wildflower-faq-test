@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Dashboard | WILDFLOWER FAQ TEST</title>
+<link rel="icon" href="data:," />
+<link rel="stylesheet" href="../assets/css/styles.css" />
+<style>
+  body{ background: var(--cream); }
+  .login-wrap{ max-width: 420px; margin: 90px auto; }
+</style>
+</head>
+<body>
+
+<div class="app-shell admin-shell">
+
+  <div class="brandbar">
+    <div class="brand">
+      <div class="logo-mark">WH</div>
+      <div class="brand-text">
+        <div class="org">Wildflower Hall · An Oberoi Resort</div>
+        <div class="name">OCLD Admin Dashboard</div>
+      </div>
+    </div>
+    <button class="btn btn-outline btn-sm hidden" id="btnLogout">Log Out</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginScreen" class="login-wrap glass-card">
+    <span class="eyebrow">Restricted Access</span>
+    <h2>Admin Login</h2>
+    <p>Enter the administrator password to view the WILDFLOWER FAQ TEST dashboard.</p>
+    <div id="loginAlert"></div>
+    <div class="field" style="margin-top:16px;">
+      <label for="adminPasswordInput">Password</label>
+      <input type="password" id="adminPasswordInput" placeholder="Enter admin password" />
+    </div>
+    <button class="btn btn-primary btn-block" id="btnAdminLogin" style="margin-top:18px;">Log In</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboardScreen" class="hidden">
+
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kv" id="kpiTotalCandidates">0</div><div class="kl">Registered Candidates</div></div>
+      <div class="kpi-card"><div class="kv" id="kpiTotalAttempts">0</div><div class="kl">Total Attempts</div></div>
+      <div class="kpi-card"><div class="kv" id="kpiPassCount">0</div><div class="kl">Pass Count</div></div>
+      <div class="kpi-card"><div class="kv" id="kpiFailCount">0</div><div class="kl">Fail Count</div></div>
+      <div class="kpi-card"><div class="kv" id="kpiAvgScore">0%</div><div class="kl">Average Score</div></div>
+      <div class="kpi-card"><div class="kv" id="kpiHighScore">0</div><div class="kl">Highest Score</div></div>
+      <div class="kpi-card"><div class="kv" id="kpiLowScore">0</div><div class="kl">Lowest Score</div></div>
+    </div>
+
+    <div class="glass-card" style="padding:24px;">
+      <div class="admin-topbar">
+        <h3 style="margin:0;">All Attempts</h3>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-outline btn-sm" id="btnExportCsv">Export CSV</button>
+          <button class="btn btn-outline btn-sm" id="btnPrintReport">Print Report</button>
+          <button class="btn btn-outline btn-sm" id="btnRefresh">Refresh</button>
+        </div>
+      </div>
+
+      <div class="admin-filters">
+        <input type="text" id="filterSearch" placeholder="Search name, email or employee ID…" />
+        <select id="filterDepartment"><option value="">All Departments</option></select>
+        <select id="filterResult">
+          <option value="">All Results</option>
+          <option value="PASS">PASS</option>
+          <option value="FAIL">FAIL</option>
+        </select>
+        <select id="filterAttempt">
+          <option value="">All Attempts</option>
+          <option value="1">Attempt 1</option>
+          <option value="2">Attempt 2</option>
+          <option value="3">Attempt 3</option>
+        </select>
+        <input type="date" id="filterDate" />
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table" id="resultsTable">
+          <thead>
+            <tr>
+              <th>Name</th><th>Emp ID</th><th>Department</th><th>Attempt</th>
+              <th>Marks</th><th>%</th><th>Result</th><th>Date</th><th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="resultsTableBody"></tbody>
+        </table>
+      </div>
+      <p id="noResultsMsg" class="hidden" style="text-align:center; padding:30px; color:var(--charcoal-soft);">No records match the current filters.</p>
+    </div>
+
+    <div class="glass-card" style="margin-top:22px; padding:24px;">
+      <h3>Most Missed Questions</h3>
+      <div class="table-wrap">
+        <table class="data-table" id="missedTable">
+          <thead><tr><th>Question ID</th><th>Question</th><th>Topic</th><th>Times Missed</th></tr></thead>
+          <tbody id="missedTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/questions.js"></script>
+<script src="../assets/js/storage.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
