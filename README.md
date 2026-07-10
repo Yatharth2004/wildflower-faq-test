@@ -185,6 +185,6 @@ Navigate to `/admin/index.html` on your deployed site (e.g. `https://<you>.githu
 The codebase is modular (separate config, question bank, and logic files) specifically to make these straightforward to add later:
 Certificates, OTP login, QR verification, email/WhatsApp result notifications, multi-language support, image/audio/video questions, multiple exam categories, advanced analytics, and AI-assisted question bank regeneration.
 
----
+----
 
 © Wildflower Hall, An Oberoi Resort · The Oberoi Centre of Learning & Development
