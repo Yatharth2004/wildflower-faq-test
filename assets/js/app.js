@@ -22,7 +22,7 @@ const App = (function () {
 
   function updateAttemptPill(candidate) {
     const pill = document.getElementById("attemptPill");
-    if (candidate) {
+    if (candidate && CONFIG.maxAttempts > 1) {
       pill.textContent = `Attempt ${candidate.attemptNumber} of ${CONFIG.maxAttempts}`;
       pill.classList.remove("hidden");
     } else {
@@ -37,13 +37,15 @@ const App = (function () {
 
     const wrap = document.getElementById("attemptBadgesWrap");
     wrap.innerHTML = "";
-    for (let i = 1; i <= CONFIG.maxAttempts; i++) {
-      const badge = document.createElement("div");
-      badge.className = "attempt-badge" +
-        (i < candidate.attemptNumber ? " used" : "") +
-        (i === candidate.attemptNumber ? " current" : "");
-      badge.textContent = `Attempt ${i} of ${CONFIG.maxAttempts}`;
-      wrap.appendChild(badge);
+    if (CONFIG.maxAttempts > 1) {
+      for (let i = 1; i <= CONFIG.maxAttempts; i++) {
+        const badge = document.createElement("div");
+        badge.className = "attempt-badge" +
+          (i < candidate.attemptNumber ? " used" : "") +
+          (i === candidate.attemptNumber ? " current" : "");
+        badge.textContent = `Attempt ${i} of ${CONFIG.maxAttempts}`;
+        wrap.appendChild(badge);
+      }
     }
 
     showScreen("screen-precheck");
@@ -61,9 +63,6 @@ const App = (function () {
     const startBtn = document.getElementById("btnStartExam");
     checkbox.addEventListener("change", () => { startBtn.disabled = !checkbox.checked; });
     startBtn.addEventListener("click", () => showScreen("screen-registration"));
-    document.getElementById("btnScrollInstructions").addEventListener("click", () => {
-      document.querySelector(".rules-grid").scrollIntoView({ behavior: "smooth", block: "center" });
-    });
   }
 
   function wirePrecheck() {
