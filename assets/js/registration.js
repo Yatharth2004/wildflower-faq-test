@@ -116,6 +116,14 @@ const Registration = (function () {
         return;
       }
 
+      if (attemptCheck.alreadyFailed) {
+        showAlert(
+          "Our records show this email/employee ID has already attempted the WILDFLOWER FAQ TEST and did not achieve the required score. As only one attempt is permitted, this email or employee ID cannot be used again. Please contact the Learning & Development Department if you believe this is an error.",
+          "danger"
+        );
+        return;
+      }
+
       if (attemptCheck.remainingAttempts <= 0) {
         showAlert(CONFIG.messages.attemptsExhausted, "danger");
         return;
