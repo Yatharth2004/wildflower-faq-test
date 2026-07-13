@@ -22,7 +22,7 @@ const CONFIG = {
   // ---------- GOOGLE APPS SCRIPT BACKEND ----------
   // Paste the deployed Web App URL from Google Apps Script here.
   // See gas/README inside the gas/ folder for deployment steps.
-  APPS_SCRIPT_URL: "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE",
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwSeYIT9IWPtbVmCC3Eyw8yLXZGKjWbViBYvDtvHSkhSKvInLBL5An649hdW1xSZOvj/exec",
 
   // ---------- EXAM SETTINGS ----------
   totalQuestions: 50,
@@ -78,9 +78,9 @@ const CONFIG = {
   // ---------- MESSAGES ----------
   messages: {
     declaration: "I confirm that I will attempt this examination honestly.",
-    attemptsExhausted: "You have already attempted the WILDFLOWER FAQ TEST. Please contact the Learning & Development Department.",
-    passMessage: "Congratulations! You have successfully passed the WILDFLOWER FAQ TEST. You are now eligible for the next stage of the OCLD selection process.",
-    failMessage: "Unfortunately, you did not achieve the required score of 100%. If attempts remain, you may attempt the examination again."
+    attemptsExhausted: "You have already attempted the WILDFLOWER FAQ TEST.",
+    passMessage: "Congratulations! You have successfully passed the WILDFLOWER FAQ TEST.",
+    failMessage: "Unfortunately, you did not achieve the required score of 100%."
   }
 };
 
