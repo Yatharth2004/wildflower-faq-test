@@ -241,6 +241,8 @@ const ExamEngine = (function () {
   }
 
   // ---------------- ANTI-CHEAT / GUARDS ----------------
+  const MAX_TAB_SWITCH_WARNINGS = 3;
+
   function beforeUnloadHandler(e) {
     if (state && !state.submitted) {
       e.preventDefault();
@@ -248,18 +250,44 @@ const ExamEngine = (function () {
       return "";
     }
   }
+
   function visibilityHandler() {
     if (document.hidden && state && !state.submitted) {
       document.getElementById("fullscreenWarning").classList.remove("hidden");
+      registerViolation("You switched away from the exam tab/app.");
     }
   }
+
+  function popStateHandler() {
+    if (state && !state.submitted) {
+      history.pushState(null, "", window.location.href);
+      registerViolation("You attempted to navigate away from the examination.");
+    }
+  }
+
+  function registerViolation(message) {
+    state.tabSwitchCount = (state.tabSwitchCount || 0) + 1;
+    Store.saveSession(state);
+    const remaining = MAX_TAB_SWITCH_WARNINGS - state.tabSwitchCount;
+    if (state.tabSwitchCount >= MAX_TAB_SWITCH_WARNINGS) {
+      alert("This is your final warning: " + message + " Your examination will now be auto-submitted.");
+      finishExam(true);
+    } else {
+      alert(message + " Warning " + state.tabSwitchCount + " of " + MAX_TAB_SWITCH_WARNINGS +
+        ". The exam will auto-submit if this happens " + remaining + " more time(s).");
+    }
+  }
+
   function attachGuards() {
     window.addEventListener("beforeunload", beforeUnloadHandler);
     document.addEventListener("visibilitychange", visibilityHandler);
+    history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", popStateHandler);
   }
   function detachGuards() {
     window.removeEventListener("beforeunload", beforeUnloadHandler);
     document.removeEventListener("visibilitychange", visibilityHandler);
+    window.removeEventListener("popstate", popStateHandler);
   }
 
   function init() {
