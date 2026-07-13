@@ -79,8 +79,8 @@ const CONFIG = {
   messages: {
     declaration: "I confirm that I will attempt this examination honestly.",
     attemptsExhausted: "You have already attempted the WILDFLOWER FAQ TEST. Please contact the Learning & Development Department.",
-    passMessage: "Congratulations! You have successfully passed the WILDFLOWER FAQ TEST.",
-    failMessage: "Unfortunately, you did not achieve the required score of 100%."
+    passMessage: "Congratulations! You have successfully passed the WILDFLOWER FAQ TEST. You are now eligible for the next stage of the OCLD selection process.",
+    failMessage: "Unfortunately, you did not achieve the required score of 100%. If attempts remain, you may attempt the examination again."
   }
 };
 
