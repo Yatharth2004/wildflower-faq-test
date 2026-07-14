@@ -86,7 +86,45 @@ const Results = (function () {
     Store.clearSession();
     App.hideLoader();
     renderResultScreen(record);
+    renderAnswerReview(state);
     App.showScreen("screen-result");
+  }
+
+  function renderAnswerReview(state) {
+    const container = document.getElementById("answerReviewList");
+    container.innerHTML = "";
+
+    state.questions.forEach((q, idx) => {
+      const given = state.answers[q.id];
+      const isCorrect = given === q.correctAnswer;
+      const isUnanswered = !given;
+
+      const card = document.createElement("div");
+      card.className = "review-card" + (isUnanswered ? " unanswered" : isCorrect ? " correct" : " incorrect");
+
+      const statusLabel = isUnanswered ? "Unanswered" : isCorrect ? "Correct" : "Incorrect";
+
+      let optionsHtml = "";
+      ["A", "B", "C", "D"].forEach(letter => {
+        let cls = "review-option";
+        let tag = "";
+        if (letter === q.correctAnswer) { cls += " is-correct-answer"; tag = " ✓ Correct Answer"; }
+        if (letter === given && given !== q.correctAnswer) { cls += " is-wrong-selected"; tag = " ✗ Your Answer"; }
+        if (letter === given && given === q.correctAnswer) { tag = " ✓ Your Answer"; }
+        optionsHtml += `<div class="${cls}"><span class="opt-letter">${letter}</span><span>${q.options[letter]}</span><span class="review-tag">${tag}</span></div>`;
+      });
+
+      card.innerHTML = `
+        <div class="review-head">
+          <span class="review-qnum">Question ${idx + 1}</span>
+          <span class="review-status status-${isUnanswered ? "unanswered" : isCorrect ? "correct" : "incorrect"}">${statusLabel}</span>
+        </div>
+        <div class="review-question">${q.question}</div>
+        <div class="review-options">${optionsHtml}</div>
+        <div class="review-explanation"><strong>Explanation:</strong> ${q.explanation || "—"}</div>
+      `;
+      container.appendChild(card);
+    });
   }
 
   function renderResultScreen(record) {
