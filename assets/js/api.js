@@ -85,6 +85,7 @@ const DemoBackend = (function () {
           attemptsUsed,
           remainingAttempts: Math.max(0, CONFIG.maxAttempts - attemptsUsed),
           alreadyPassed: passed,
+          alreadyFailed: attemptsUsed > 0 && !passed,
           servedQuestionIds: records.map(r => r.questionIds || [])
         };
       }
