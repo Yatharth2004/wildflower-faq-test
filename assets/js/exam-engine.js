@@ -1,279 +1,171 @@
 /**
- * exam-engine.js
- * Core examination engine: question selection with randomization &
- * difficulty balancing, countdown timer, navigator, answer tracking,
- * auto-save, auto-submit, and basic anti-cheat warnings.
+ * results.js
+ * Scores a completed exam session, submits the result to the backend
+ * (Google Sheets via Apps Script), and renders the Result screen.
  */
 
-const ExamEngine = (function () {
+const Results = (function () {
 
-  let state = null; // the live exam session object
-  let timerInterval = null;
+  function scoreSession(state) {
+    let correct = 0, wrong = 0, unanswered = 0;
+    const questionIds = [];
+    const selectedAnswers = {};
+    const correctAnswers = {};
 
-  function shuffle(arr) {
-    const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  /**
-   * The bank is now a hand-curated set that exactly matches CONFIG.totalQuestions,
-   * so every attempt uses all of them — just in a freshly shuffled order, with
-   * freshly shuffled option positions, so it doesn't feel identical each time.
-   */
-  function selectQuestions(candidate) {
-    let combined = shuffle(QUESTION_BANK);
-
-    // Re-shuffle option order per-serve so the correct letter isn't predictable
-    combined = combined.map(q => {
-      const letters = ["A", "B", "C", "D"];
-      const entries = letters.map(l => ({ text: q.options[l], isCorrect: l === q.correctAnswer }));
-      const shuffled = shuffle(entries);
-      const newOptions = {};
-      let newCorrect = "A";
-      shuffled.forEach((e, idx) => {
-        const letter = letters[idx];
-        newOptions[letter] = e.text;
-        if (e.isCorrect) newCorrect = letter;
-      });
-      return { ...q, options: newOptions, correctAnswer: newCorrect };
+    state.questions.forEach(q => {
+      questionIds.push(q.id);
+      correctAnswers[q.id] = q.correctAnswer;
+      const given = state.answers[q.id];
+      if (!given) {
+        unanswered++;
+      } else {
+        selectedAnswers[q.id] = given;
+        if (given === q.correctAnswer) correct++;
+        else wrong++;
+      }
     });
 
-    return combined;
+    const marks = correct * CONFIG.marksPerQuestion;
+    const percentage = Math.round((marks / CONFIG.totalMarks) * 100);
+    const passed = percentage >= CONFIG.passingPercentage;
+
+    return { correct, wrong, unanswered, marks, percentage, passed, questionIds, selectedAnswers, correctAnswers };
   }
 
-  function startExam(candidate) {
-    const questions = selectQuestions(candidate);
-    state = {
-      candidate,
-      questions,
-      answers: {},      // qId -> letter
-      marked: {},        // qId -> true
-      currentIndex: 0,
-      startTime: Date.now(),
-      durationMs: CONFIG.durationMinutes * 60 * 1000,
-      submitted: false
+  function formatDuration(ms) {
+    const totalSec = Math.floor(ms / 1000);
+    const mm = Math.floor(totalSec / 60);
+    const ss = totalSec % 60;
+    return `${mm}m ${ss}s`;
+  }
+
+  async function processAndShow(state, autoSubmitted) {
+    App.showLoader("Scoring your examination…");
+
+    const score = scoreSession(state);
+    const submissionTime = new Date();
+    const completionMs = Date.now() - state.startTime;
+    const device = detectDevice();
+
+    const record = {
+      timestamp: new Date(state.startTime).toISOString(),
+      candidateUuid: state.candidate.candidateUuid,
+      fullName: state.candidate.fullName,
+      email: state.candidate.email,
+      phone: state.candidate.phone,
+      employeeId: state.candidate.employeeId,
+      department: state.candidate.department,
+      designation: state.candidate.designation || "",
+      attemptNumber: state.candidate.attemptNumber,
+      remainingAttempts: Math.max(0, CONFIG.maxAttempts - state.candidate.attemptNumber),
+      questionIds: score.questionIds,
+      selectedAnswers: score.selectedAnswers,
+      correctAnswers: score.correctAnswers,
+      correctCount: score.correct,
+      wrongCount: score.wrong,
+      unanswered: score.unanswered,
+      marks: score.marks,
+      percentage: score.percentage,
+      passResult: score.passed ? "PASS" : "FAIL",
+      completionTime: formatDuration(completionMs),
+      submissionId: uuidv4(),
+      browser: device.browser,
+      operatingSystem: device.os,
+      deviceType: device.device,
+      autoSubmitted: !!autoSubmitted,
+      date: submissionTime.toLocaleDateString(),
+      time: submissionTime.toLocaleTimeString()
     };
-    Store.saveSession(state);
 
-    document.getElementById("examAttemptNo").textContent = candidate.attemptNumber;
-    renderNavGrid();
-    renderQuestion();
-    startTimer();
-    attachGuards();
-  }
-
-  function resumeIfAny() {
-    const saved = Store.loadSession();
-    if (saved && !saved.submitted) {
-      const elapsed = Date.now() - saved.startTime;
-      if (elapsed < saved.durationMs) {
-        state = saved;
-        return true;
-      }
+    try {
+      await Api.submitResult(record);
+    } catch (err) {
+      console.error("Failed to submit result to backend:", err);
     }
-    return false;
+
+    Store.clearSession();
+    App.hideLoader();
+    renderResultScreen(record);
+    renderAnswerReview(state);
+    App.showScreen("screen-result");
   }
 
-  function renderNavGrid() {
-    const grid = document.getElementById("navGrid");
-    grid.innerHTML = "";
+  function renderAnswerReview(state) {
+    const container = document.getElementById("answerReviewList");
+    container.innerHTML = "";
+
     state.questions.forEach((q, idx) => {
-      const dot = document.createElement("div");
-      dot.className = "nav-dot";
-      dot.textContent = idx + 1;
-      dot.dataset.idx = idx;
-      dot.addEventListener("click", () => { state.currentIndex = idx; renderQuestion(); });
-      grid.appendChild(dot);
+      const given = state.answers[q.id];
+      const isCorrect = given === q.correctAnswer;
+      const isUnanswered = !given;
+
+      const card = document.createElement("div");
+      card.className = "review-card" + (isUnanswered ? " unanswered" : isCorrect ? " correct" : " incorrect");
+
+      const statusLabel = isUnanswered ? "Unanswered" : isCorrect ? "Correct" : "Incorrect";
+
+      let optionsHtml = "";
+      ["A", "B", "C", "D"].forEach(letter => {
+        let cls = "review-option";
+        let tag = "";
+        if (letter === q.correctAnswer) { cls += " is-correct-answer"; tag = " ✓ Correct Answer"; }
+        if (letter === given && given !== q.correctAnswer) { cls += " is-wrong-selected"; tag = " ✗ Your Answer"; }
+        if (letter === given && given === q.correctAnswer) { tag = " ✓ Your Answer"; }
+        optionsHtml += `<div class="${cls}"><span class="opt-letter">${letter}</span><span>${q.options[letter]}</span><span class="review-tag">${tag}</span></div>`;
+      });
+
+      card.innerHTML = `
+        <div class="review-head">
+          <span class="review-qnum">Question ${idx + 1}</span>
+          <span class="review-status status-${isUnanswered ? "unanswered" : isCorrect ? "correct" : "incorrect"}">${statusLabel}</span>
+        </div>
+        <div class="review-question">${q.question}</div>
+        <div class="review-options">${optionsHtml}</div>
+        <div class="review-explanation"><strong>Explanation:</strong> ${q.explanation || "—"}</div>
+      `;
+      container.appendChild(card);
     });
-    updateNavStates();
   }
 
-  function updateNavStates() {
-    const dots = document.querySelectorAll("#navGrid .nav-dot");
-    let answeredCt = 0, markedCt = 0;
-    dots.forEach((dot, idx) => {
-      const q = state.questions[idx];
-      dot.classList.remove("answered", "marked", "current");
-      if (state.answers[q.id]) { dot.classList.add("answered"); answeredCt++; }
-      if (state.marked[q.id]) { dot.classList.add("marked"); markedCt++; }
-      if (idx === state.currentIndex) dot.classList.add("current");
-    });
-    document.getElementById("statAnswered").textContent = answeredCt;
-    document.getElementById("statMarked").textContent = markedCt;
-    document.getElementById("statRemaining").textContent = state.questions.length - answeredCt;
-    document.getElementById("answeredCount").textContent = answeredCt;
-    document.getElementById("progressFill").style.width = (answeredCt / state.questions.length * 100) + "%";
-  }
+  function renderResultScreen(record) {
+    const badge = document.getElementById("resultBadge");
+    badge.textContent = record.passResult;
+    badge.className = "result-badge " + (record.passResult === "PASS" ? "pass" : "fail");
 
-  function renderQuestion() {
-    const q = state.questions[state.currentIndex];
-    document.getElementById("qCurrentNum").textContent = state.currentIndex + 1;
-    document.getElementById("qTopic").textContent = q.topic;
-    document.getElementById("qText").textContent = q.question;
+    document.getElementById("resultMarks").textContent = record.marks;
+    document.getElementById("resultPercentLabel").textContent = record.percentage + "% Score";
 
-    const list = document.getElementById("optionList");
-    list.innerHTML = "";
-    ["A", "B", "C", "D"].forEach(letter => {
-      const item = document.createElement("div");
-      item.className = "option-item" + (state.answers[q.id] === letter ? " selected" : "");
-      item.innerHTML = `<span class="opt-letter">${letter}</span><span>${q.options[letter]}</span>`;
-      item.addEventListener("click", () => selectAnswer(letter));
-      list.appendChild(item);
-    });
-
-    const markBtn = document.getElementById("btnMarkReview");
-    markBtn.textContent = state.marked[q.id] ? "Unmark Review" : "Mark for Review";
-
-    document.getElementById("btnPrev").disabled = state.currentIndex === 0;
-    document.getElementById("btnNext").textContent =
-      state.currentIndex === state.questions.length - 1 ? "Finish →" : "Next →";
-
-    updateNavStates();
-    Store.saveSession(state);
-  }
-
-  function selectAnswer(letter) {
-    const q = state.questions[state.currentIndex];
-    state.answers[q.id] = letter;
-    renderQuestion();
-  }
-
-  function clearResponse() {
-    const q = state.questions[state.currentIndex];
-    delete state.answers[q.id];
-    renderQuestion();
-  }
-
-  function toggleMark() {
-    const q = state.questions[state.currentIndex];
-    state.marked[q.id] = !state.marked[q.id];
-    renderQuestion();
-  }
-
-  function goNext() {
-    if (state.currentIndex < state.questions.length - 1) {
-      state.currentIndex++;
-      renderQuestion();
+    const msgBox = document.getElementById("resultMessage");
+    if (record.passResult === "PASS") {
+      msgBox.innerHTML = `<div class="alert alert-success">${CONFIG.messages.passMessage}</div>`;
     } else {
-      confirmSubmit();
+      msgBox.innerHTML = `<div class="alert alert-danger">${CONFIG.messages.failMessage}</div>`;
     }
-  }
-  function goPrev() {
-    if (state.currentIndex > 0) {
-      state.currentIndex--;
-      renderQuestion();
-    }
-  }
 
-  function startTimer() {
-    updateTimerDisplay();
-    timerInterval = setInterval(() => {
-      const remaining = state.durationMs - (Date.now() - state.startTime);
-      if (remaining <= 0) {
-        clearInterval(timerInterval);
-        finishExam(true);
-        return;
-      }
-      updateTimerDisplay(remaining);
-    }, 1000);
-  }
+    document.getElementById("statCorrect").textContent = record.correctCount;
+    document.getElementById("statWrong").textContent = record.wrongCount;
+    document.getElementById("statUnanswered").textContent = record.unanswered;
+    document.getElementById("statTime").textContent = record.completionTime;
 
-  function updateTimerDisplay(remainingOverride) {
-    const remaining = remainingOverride !== undefined
-      ? remainingOverride
-      : state.durationMs - (Date.now() - state.startTime);
-    const totalSec = Math.max(0, Math.floor(remaining / 1000));
-    const mm = String(Math.floor(totalSec / 60)).padStart(2, "0");
-    const ss = String(totalSec % 60).padStart(2, "0");
-    const el = document.getElementById("timerDisplay");
-    el.textContent = `${mm}:${ss}`;
-    el.classList.toggle("low", totalSec <= 120);
-  }
+    document.getElementById("dCandidateName").textContent = record.fullName;
+    document.getElementById("dEmployeeId").textContent = record.employeeId;
+    document.getElementById("dDepartment").textContent = record.department;
+    document.getElementById("dAttempt").textContent = record.attemptNumber + " of " + CONFIG.maxAttempts;
+    document.getElementById("dSubmission").textContent = `${record.date} ${record.time}`;
 
-  function confirmSubmit() {
-    const unanswered = state.questions.length - Object.keys(state.answers).length;
-    const msg = unanswered > 0
-      ? `You have ${unanswered} unanswered question(s). Are you sure you want to submit the examination? This action cannot be undone.`
-      : "Are you sure you want to submit the examination? This action cannot be undone.";
-    if (confirm(msg)) {
-      finishExam(false);
-    }
-  }
-
-  function finishExam(autoSubmitted) {
-    if (state.submitted) return;
-    state.submitted = true;
-    clearInterval(timerInterval);
-    detachGuards();
-    Store.saveSession(state);
-    Results.processAndShow(state, autoSubmitted);
-  }
-
-  // ---------------- ANTI-CHEAT / GUARDS ----------------
-  const MAX_TAB_SWITCH_WARNINGS = 3;
-
-  function beforeUnloadHandler(e) {
-    if (state && !state.submitted) {
-      e.preventDefault();
-      e.returnValue = "";
-      return "";
-    }
-  }
-
-  function visibilityHandler() {
-    if (document.hidden && state && !state.submitted) {
-      document.getElementById("fullscreenWarning").classList.remove("hidden");
-      registerViolation("You switched away from the exam tab/app.");
-    }
-  }
-
-  function popStateHandler() {
-    if (state && !state.submitted) {
-      history.pushState(null, "", window.location.href);
-      registerViolation("You attempted to navigate away from the examination.");
-    }
-  }
-
-  function registerViolation(message) {
-    state.tabSwitchCount = (state.tabSwitchCount || 0) + 1;
-    Store.saveSession(state);
-    const remaining = MAX_TAB_SWITCH_WARNINGS - state.tabSwitchCount;
-    if (state.tabSwitchCount >= MAX_TAB_SWITCH_WARNINGS) {
-      alert("This is your final warning: " + message + " Your examination will now be auto-submitted.");
-      finishExam(true);
+    const noteBox = document.getElementById("remainingAttemptsNote");
+    const retakeBtn = document.getElementById("btnRetakeExam");
+    if (record.passResult === "PASS") {
+      noteBox.innerHTML = `<div class="alert alert-info">All remaining attempts have been disabled since you passed.</div>`;
+      retakeBtn.classList.add("hidden");
+    } else if (record.remainingAttempts > 0) {
+      noteBox.innerHTML = `<div class="alert alert-info">You have ${record.remainingAttempts} attempt(s) remaining. Attempt ${record.attemptNumber + 1} of ${CONFIG.maxAttempts} may be started below.</div>`;
+      retakeBtn.classList.remove("hidden");
     } else {
-      alert(message + " Warning " + state.tabSwitchCount + " of " + MAX_TAB_SWITCH_WARNINGS +
-        ". The exam will auto-submit if this happens " + remaining + " more time(s).");
+      noteBox.innerHTML = `<div class="alert alert-danger">${CONFIG.messages.attemptsExhausted}</div>`;
+      retakeBtn.classList.add("hidden");
     }
   }
 
-  function attachGuards() {
-    window.addEventListener("beforeunload", beforeUnloadHandler);
-    document.addEventListener("visibilitychange", visibilityHandler);
-    history.pushState(null, "", window.location.href);
-    window.addEventListener("popstate", popStateHandler);
-  }
-  function detachGuards() {
-    window.removeEventListener("beforeunload", beforeUnloadHandler);
-    document.removeEventListener("visibilitychange", visibilityHandler);
-    window.removeEventListener("popstate", popStateHandler);
-  }
-
-  function init() {
-    document.getElementById("btnPrev").addEventListener("click", goPrev);
-    document.getElementById("btnNext").addEventListener("click", goNext);
-    document.getElementById("btnClear").addEventListener("click", clearResponse);
-    document.getElementById("btnMarkReview").addEventListener("click", toggleMark);
-    document.getElementById("btnSubmitTop").addEventListener("click", confirmSubmit);
-    document.getElementById("btnSubmitSide").addEventListener("click", confirmSubmit);
-    document.getElementById("btnResumeExam").addEventListener("click", () => {
-      document.getElementById("fullscreenWarning").classList.add("hidden");
-    });
-  }
-
-  return { init, startExam, resumeIfAny, getState: () => state, renderQuestion, renderNavGrid, startTimerFromResume: startTimer, attachGuards };
+  return { processAndShow, scoreSession };
 })();
