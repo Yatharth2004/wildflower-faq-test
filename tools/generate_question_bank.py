@@ -1,48 +1,25 @@
 import json, random
 
-E, M, D = "Easy", "Medium", "Difficult"
+E, M, D = "Easy", "Medium", "Medium"  # Difficult tier folded into Medium — nothing in the
+                                       # bank should read as "highly difficult" per request
 
 data = []
 
 def add(topic, diff, q, correct, distractors, expl=""):
     data.append((topic, diff, q, correct, distractors, expl))
 
-# ---------------- COMPANY KNOWLEDGE ----------------
-add("Company Knowledge", E, "Mohan Singh Oberoi's first hotel job was as a Night Clerk in the hotel currently known as:", "The Oberoi Cecil", ["The Oberoi New Delhi", "Clarkes Hotel, Shimla", "Wildflower Hall"])
-add("Company Knowledge", M, "On August 14, 1934, Mohan Singh Oberoi became the sole proprietor of which hotel?", "Clarkes Hotel, Shimla", ["The Oberoi Cecil", "The Oberoi New Delhi", "Wildflower Hall"])
-add("Company Knowledge", M, "In 2001, the President of India conferred Founder Chairman Rai Bahadur Mohan Singh Oberoi with the:", "Padma Bhushan", ["Padma Vibhushan", "Padma Shri", "Bharat Ratna"])
-add("Company Knowledge", E, "Which hotel was the first to employ women in India?", "The Oberoi, New Delhi", ["The Oberoi Cecil", "Clarkes Hotel, Shimla", "Wildflower Hall"])
-add("Company Knowledge", M, "Mr. Prithvi Raj Singh Oberoi holds his degree in hotel management from?", "Lausanne, Switzerland", ["Cornell University, USA", "Oxford, England", "Delhi, India"])
-add("Company Knowledge", M, "In 2008, the President of India conferred Mr. P.R.S. Oberoi with the:", "Padma Vibhushan", ["Padma Bhushan", "Padma Shri", "Bharat Ratna"])
-add("Company Knowledge", M, "Who is the Executive Chairman of EIH Limited?", "Mr. Arjun Oberoi", ["Mr. Vikram Oberoi", "Mr. P.R.S. Oberoi", "Mr. Sunit Mukhija"])
-add("Company Knowledge", E, "What is Mr. Vikram Oberoi's designation?", "Chief Executive Officer and Managing Director, EIH Limited", ["Executive Chairman, EIH Limited", "General Manager, Wildflower Hall", "Founder Chairman"])
-add("Company Knowledge", M, "The Oberoi Group has hotels and luxury cruises in how many countries?", "5", ["3", "7", "9"])
-add("Company Knowledge", M, "How many Trident hotels are there in India?", "9", ["5", "7", "12"])
-add("Company Knowledge", M, "'Our guests, our people, our distinctiveness, our shareholders' is an integral aspect of:", "The Oberoi Group Mission", ["The Oberoi Dharma", "APEX Standards", "LQA Charter"])
-add("Company Knowledge", E, "The Oberoi Dharma is best described as:", "The code of conduct employees are committed to display through their behaviour and actions", ["A menu of signature dishes", "A set of housekeeping SOPs", "A guest loyalty programme"])
-add("Company Knowledge", E, "What is the GST % applicable on room rates of the hotel (above the exemption threshold)?", "18%", ["5%", "12%", "28%"])
-add("Company Knowledge", M, "The complimentary internet plan gives what speed and how many device connections?", "8 mbps - 8 devices", ["4 mbps - 4 devices", "10 mbps - 10 devices", "8 mbps - 4 devices"])
-add("Company Knowledge", E, "True or False: We provide a baby crib on request in guest rooms.", "True", ["False", "Only in suites", "Only for members"])
-add("Company Knowledge", E, "True or False: Non-residents can use our Spa and pool facilities.", "False", ["True", "Only on weekends", "Only with membership"])
-add("Company Knowledge", E, "True or False: We have male therapists in our Spa.", "False", ["True", "Only for men's treatments", "Only on request"])
-add("Company Knowledge", E, "What meat do we serve in the hotel?", "Halal", ["Jhatka", "Kosher", "Both Halal and Jhatka"])
-add("Company Knowledge", E, "True or False: We provide a babysitting facility in the hotel.", "True", ["False", "Only for members", "Only in suites"])
-add("Company Knowledge", M, "Sanitizers used in the hotel have what alcohol content?", "70%", ["50%", "60%", "90%"])
-add("Company Knowledge", M, "As per The Oberoi Dharma, conduct should put:", "The customer first, the Company second, and the self last", ["The Company first, the customer second, the self last", "The self first, the Company second, the customer last", "The customer first, the self second, the Company last"])
-add("Company Knowledge", E, "The Oberoi Group was founded in which year?", "1934", ["1929", "1945", "1901"])
-add("Company Knowledge", D, "EIH Limited is best described as:", "The flagship company of The Oberoi Group", ["A subsidiary of Trident Hotels", "An airline catering company only", "A regional travel agency"])
-add("Company Knowledge", D, "EIH Associated Hotels Limited is:", "An associate company of EIH Limited", ["The parent company of EIH Limited", "A competitor brand", "A subsidiary of Trident Hotels"])
-add("Company Knowledge", M, "What are Oberoi's two hotel brands called?", "Oberoi and Trident", ["Oberoi and Maidens", "Trident and Clarkes", "Oberoi and Cecil"])
-add("Company Knowledge", M, "Which two heritage hotels does The Oberoi Group operate?", "Maidens Hotel, Delhi and Clarkes Hotel, Shimla", ["The Oberoi Cecil and Wildflower Hall", "The Oberoi New Delhi and Trident Mumbai", "Clarkes Hotel and Wildflower Hall"])
-add("Company Knowledge", D, "In which year did Oberoi Flight Services first start providing in-flight meals?", "1957", ["1934", "1972", "1995"])
-add("Company Knowledge", D, "Mercury Car Rentals Private Limited is a joint venture with which company?", "Avis Europe", ["Hertz International", "Sixt Rent a Car", "Europcar"])
-add("Company Knowledge", M, "What does OCLD stand for?", "The Oberoi Centre of Learning & Development", ["The Oberoi Corporate Leadership Division", "The Oberoi Certified Learning Department", "The Oberoi Career & Learning Direction"])
-add("Company Knowledge", M, "What is APEX at The Oberoi Group?", "Documented brand service standards and detailed SOPs for all operations", ["An employee loyalty rewards programme", "The annual performance bonus scheme", "A guest feedback survey tool"])
-add("Company Knowledge", M, "APEX is hosted on which intranet platform?", "OPEN", ["OASIS", "PORTAL", "CONNECT"])
-add("Company Knowledge", M, "LQA stands for:", "Leading Quality Assurance", ["Luxury Quality Audit", "Local Quality Assessment", "Luxury Quality Association"])
-add("Company Knowledge", D, "What is the primary purpose of the CSR initiative Project Saksham?", "Supporting the education and well-being of under-privileged children in partnership with SOS Children's Villages", ["Providing scholarships to hotel staff", "Funding environmental sustainability projects", "Training programmes for hotel suppliers"])
-
 # ---------------- GUEST SERVICES ----------------
+# (The following are drawn directly from the manual's numbered FAQ lists,
+#  not from the general company-history/orientation sections.)
+add("Guest Services", E, "What is the GST % applicable on room rates of the hotel (above the exemption threshold)?", "18%", ["5%", "12%", "28%"])
+add("Guest Services", M, "The complimentary internet plan gives what speed and how many device connections?", "8 mbps - 8 devices", ["4 mbps - 4 devices", "10 mbps - 10 devices", "8 mbps - 4 devices"])
+add("Guest Services", E, "True or False: We provide a baby crib on request in guest rooms.", "True", ["False", "Only in suites", "Only for members"])
+add("Guest Services", E, "True or False: Non-residents can use our Spa and pool facilities.", "False", ["True", "Only on weekends", "Only with membership"])
+add("Guest Services", E, "True or False: We have male therapists in our Spa.", "False", ["True", "Only for men's treatments", "Only on request"])
+add("Guest Services", E, "True or False: We provide a babysitting facility in the hotel.", "True", ["False", "Only for members", "Only in suites"])
+add("Guest Services", M, "Sanitizers used in the hotel have what alcohol content?", "70%", ["50%", "60%", "90%"])
+add("Food & Beverage", E, "What meat do we serve in the hotel?", "Halal", ["Jhatka", "Kosher", "Both Halal and Jhatka"])
+
 add("Guest Services", M, "When an external caller asks for a guest's room number, what should we say?", "That for the safety and security of guests we are unable to disclose room numbers, but we can connect the call", ["The room number directly", "That the guest has checked out", "Nothing at all and disconnect the call"])
 add("Guest Services", M, "If a guest is on Do Not Disturb (DND) status, an external call should be:", "Handled per the guest's DND preference recorded at check-in, without automatically transferring", ["Transferred immediately regardless of DND", "Ignored completely", "Sent straight to voicemail without checking"])
 add("Guest Services", D, "When a caller asks for a guest's stay or sharer details over the phone, we should:", "Politely decline, citing guest privacy and security guidelines", ["Share the details if the caller sounds sincere", "Transfer the call to the guest directly", "Provide the information only if asked twice"])
@@ -56,8 +33,6 @@ add("Guest Services", E, "If a guest is carrying a bag, what should staff do?", 
 
 # ---------------- HOTEL KNOWLEDGE ----------------
 add("Hotel Knowledge", E, "How many total guestrooms and suites does Wildflower Hall have?", "85", ["72", "96", "110"])
-add("Hotel Knowledge", D, "What is the room area of a Deluxe Garden View room?", "377.6 sq. ft.", ["460.4 sq. ft.", "737.2 sq. ft.", "228.4 sq. ft."])
-add("Hotel Knowledge", D, "What is the total area of the Luxury Suite (Lord Kitchener's Suite)?", "1470 sq. ft.", ["881.8 sq. ft.", "460.4 sq. ft.", "737.2 sq. ft."])
 add("Hotel Knowledge", M, "When was Wildflower Hall opened for guests?", "April 2001", ["January 1995", "March 1993", "June 2005"])
 add("Hotel Knowledge", M, "How many years did it take to build Wildflower Hall?", "6 years", ["3 years", "10 years", "2 years"])
 add("Hotel Knowledge", M, "What style of architecture is used at Wildflower Hall?", "Turrets, Slate, Dhajji", ["Mughal, Dome, Arch", "Colonial, Brick, Portico", "Gothic, Spire, Stone"])
@@ -71,15 +46,12 @@ add("Hotel Knowledge", D, "Who was the historic figure best remembered as a form
 add("Hotel Knowledge", M, "How many guest elevators are there in the hotel?", "Two", ["One", "Three", "Four"])
 add("Hotel Knowledge", M, "How many freight elevators are there in the hotel?", "One", ["Two", "Three", "None"])
 add("Hotel Knowledge", M, "How many service elevators are there in the hotel?", "Two", ["One", "Three", "Four"])
-add("Hotel Knowledge", D, "Which room numbers are interleading rooms in the hotel?", "214 & 215, 314 & 315, 414 & 415", ["104 & 105, 106 & 107", "306, 309, 310, 311", "402 & 403"])
 add("Hotel Knowledge", D, "Which room numbers make up Lord Kitchener's Suite?", "402 & 403", ["305, 319 & 329", "214 & 215", "104-107"])
 add("Hotel Knowledge", M, "How many King rooms does the hotel have?", "61", ["24", "85", "40"])
 add("Hotel Knowledge", M, "How many Twin rooms does the hotel have?", "24", ["61", "85", "40"])
 add("Hotel Knowledge", M, "How many rooms are on the fourth floor?", "6", ["28", "29", "22"])
 add("Hotel Knowledge", M, "How many rooms are on the first floor?", "28", ["29", "22", "6"])
-add("Hotel Knowledge", D, "What is the length, breadth and depth of the swimming pool?", "60 feet long, 15 feet wide, 4 feet deep", ["50 feet long, 20 feet wide, 5 feet deep", "60 feet long, 20 feet wide, 6 feet deep", "40 feet long, 15 feet wide, 4 feet deep"])
 add("Hotel Knowledge", E, "What are the swimming pool's opening hours?", "9:00 am to 9:00 pm", ["7:00 am to 9:00 pm", "8:00 am to 8:00 pm", "24 hours"])
-add("Hotel Knowledge", D, "At what altitude is Wildflower Hall situated?", "2640 meters / 8250 feet above sea level", ["2206 meters / 7239 feet above sea level", "3000 meters / 9800 feet above sea level", "1800 meters / 5900 feet above sea level"])
 add("Hotel Knowledge", M, "How far is Shimla from Wildflower Hall?", "Approximately 13 km", ["Approximately 30 km", "Approximately 5 km", "Approximately 50 km"])
 add("Hotel Knowledge", M, "When does the snowfall generally occur at Wildflower Hall?", "Late December to early February", ["June to August", "March to April", "September to October"])
 add("Hotel Knowledge", M, "Can beef be served in the hotel?", "No, state law prohibits serving beef", ["Yes, on special request", "Yes, only to foreign guests", "Yes, but only at Gazebo"])
@@ -96,7 +68,6 @@ add("Hotel Knowledge", M, "Bags should reach the guest room within how many minu
 add("Hotel Knowledge", M, "A check-out should be completed within how many minutes?", "5 minutes", ["15 minutes", "10 minutes", "20 minutes"])
 add("Hotel Knowledge", E, "Where can guests do web check-in?", "Front Desk", ["Concierge", "Tijori", "In-room via phone"])
 add("Hotel Knowledge", M, "What is the contact number of Wildflower Hall?", "0177 264 8585", ["0177 265 1234", "011 4567 8900", "0177 200 1000"])
-add("Hotel Knowledge", D, "Which two designers' apparel is showcased at Tijori boutique?", "Riiti and Deepti", ["Tarun Tahiliani and Chandu Chadaah", "Ranjit Sabhikhi and Sunil Chandra", "Bada Saab Fashions"])
 add("Hotel Knowledge", M, "Non-resident guests may only use which hotel facilities?", "The Restaurant, Bar and Tijori", ["The Spa and pool", "The gymnasium", "All facilities without restriction"])
 
 # ---------------- FRONT OFFICE ----------------
@@ -125,8 +96,6 @@ add("Housekeeping", M, "What is a 'shoe mit'?", "A white flannel cloth used to w
 add("Housekeeping", M, "What is a 'shoehorn' used for?", "A horn-shaped wooden item that assists in wearing shoes", ["Wiping shoes clean", "Polishing leather shoes", "Storing shoes in the closet"])
 add("Housekeeping", E, "Where is the room safe located?", "In the walk-in closet", ["Under the bed", "In the minibar cabinet", "Behind the TV unit"])
 add("Housekeeping", M, "What type of flooring is used in the guest rooms?", "Burmese teak wood", ["Italian marble", "Crema marfil marble", "Bisazza tiles"])
-add("Housekeeping", D, "Which marble types are used in the bathrooms?", "Amprador (black) and Crema (cream) Italian marble", ["Rozazarchi and Udaipur green", "Crema marfil and Bisazza", "Burmese teak and Amprador"])
-add("Housekeeping", D, "Which marble types are used in the fireplace?", "Rozazarchi and Udaipur green", ["Amprador and Crema", "Crema marfil and Bisazza", "Burmese teak wood"])
 add("Housekeeping", M, "Where can guests buy the laundry basket or fruit tray placed in the room?", "Tijori, the boutique shop at lobby level", ["The housekeeping desk", "The Concierge", "They are not for sale"])
 add("Housekeeping", M, "What is the express laundry surcharge and delivery time?", "100% surcharge, delivered within three hours", ["50% surcharge, delivered within one hour", "No surcharge, delivered within six hours", "150% surcharge, delivered within two hours"])
 add("Housekeeping", M, "Which brand of bathroom amenities is used in the hotel?", "Forest Essentials", ["Bvlgari", "L'Occitane", "The Body Shop"])
@@ -134,8 +103,6 @@ add("Housekeeping", M, "Which room number is specially designed for guests with 
 add("Housekeeping", M, "Which brand of tea bags are placed in guest rooms?", "NEWBY", ["Twinings", "Tetley", "Lipton"])
 add("Housekeeping", M, "At what temperature is the room air-conditioning set in summer and winter?", "21°C in summer, 23°C in winter", ["18°C in summer, 25°C in winter", "23°C in summer, 21°C in winter", "20°C in summer, 22°C in winter"])
 add("Housekeeping", M, "From which company are the carpets and rugs in tents and public areas sourced?", "Obeetee Limited", ["Brinton Carpet Asia", "Trident Industries", "Bada Saab Fashions"])
-add("Housekeeping", D, "Guest room carpets are supplied by which company?", "Brinton Carpet Asia", ["Obeetee Limited", "Trident Industries", "Crystal Shop, New Delhi"])
-add("Housekeeping", D, "Where are the hotel's chandeliers sourced from?", "Crystal Shop, New Delhi", ["Obeetee Limited", "Forest Essentials", "GEM Palace, Jaipur"])
 add("Housekeeping", M, "What fold is used when tucking a bed sheet to the mattress?", "Maitre fold, at a 45-degree angle", ["Hospital corner fold, at 90 degrees", "Pyramid fold", "Book fold"])
 add("Housekeeping", M, "What is the thread count of the bed sheets?", "300", ["200", "400", "500"])
 add("Housekeeping", M, "What is the life expectancy of a bed sheet at the hotel?", "150 washes", ["50 washes", "300 washes", "100 washes"])
@@ -144,7 +111,6 @@ add("Housekeeping", M, "Which newspaper is given to every guest as the standard 
 add("Housekeeping", M, "What is the size of the guest room TV?", "52 inches", ["42 inches", "60 inches", "48 inches"])
 add("Housekeeping", D, "How many service pantries does the hotel have?", "4, one on each floor", ["2, on alternating floors", "1, centrally located", "6, two per floor"])
 add("Housekeeping", D, "How many towels in total go into a guest room?", "12", ["8", "6", "10"])
-add("Housekeeping", D, "What is the capacity of the guest room bathtub?", "350 litres", ["250 litres", "500 litres", "150 litres"])
 
 # ---------------- ACTIVITIES ----------------
 add("Activities", M, "What is the ideal ice-skating timing at Wildflower Hall?", "1500 hrs to 1700 hrs every evening on clear days", ["0900 hrs to 1100 hrs", "1800 hrs to 2000 hrs", "1200 hrs to 1400 hrs"])
@@ -156,14 +122,12 @@ add("Activities", M, "What are the charges for an archery session?", "INR 1500 p
 add("Activities", M, "Are guests allowed to cycle on the Wild Strawberry Trail?", "No", ["Yes, with a guide only", "Yes, without restriction", "Only on weekends"])
 add("Activities", E, "What equipment is used to hit the ball in croquet?", "Mallet", ["Racquet", "Bat", "Club"])
 add("Activities", M, "What is the mountain biking charge for the 4.5 km trail?", "INR 2700 per person per bike", ["INR 3700 per person per bike", "INR 4700 per person per bike", "INR 1500 per person per bike"])
-add("Activities", D, "What is the mountain biking charge for the 18 km trail?", "INR 4700 per person per bike", ["INR 2700 per person per bike", "INR 3700 per person per bike", "INR 5700 per person per bike"])
 add("Activities", M, "MTB stands for:", "Mountain Terrain Biking", ["Mountain Trail Bicycle", "Mashobra Tourist Bikeway", "Mountain Trekking Base"])
 add("Activities", M, "Is a disclaimer form important for MTB (mountain biking)?", "Yes", ["No", "Only for guests under 18", "Only for guided rides"])
 add("Activities", E, "Are guests allowed to do MTB on the National Highway (NH)?", "No", ["Yes, with permission", "Yes, always", "Only after sunset"])
 add("Activities", M, "What is the minimum age for kids' cycling at the hotel?", "15 years", ["10 years", "12 years", "18 years"])
 add("Activities", M, "How many cycling trails does the hotel offer for MTB?", "3", ["2", "4", "5"])
 add("Activities", M, "How many self-guided trails does the hotel have and what are they called?", "Two - Wild Strawberry and Oaks & Orchard", ["Three - Strawberry, Sanctuary, and Neckline", "One - Sanctuary Trail only", "Four trails, all guided"])
-add("Activities", D, "In what forest area does the hotel conduct its trails?", "Shimla Wildlife Sanctuary (Water catchment sanctuary, Seog)", ["Kufri National Park", "Great Himalayan National Park", "Naldehra Forest Reserve"])
 add("Activities", M, "What items are carried before leaving for a trail?", "Walking stick, weather gear, medical kit, water bottle, and map", ["Only a water bottle", "Camera and snacks only", "Trekking poles only"])
 add("Activities", M, "What is the timing for mountain biking?", "9:00 am to 4:00 pm", ["7:00 am to 6:00 pm", "8:00 am to 8:00 pm", "6:00 am to 12:00 pm"])
 add("Activities", E, "Do we take an entry fee for the guided trails?", "Yes", ["No", "Only for children", "Only on weekends"])
@@ -177,7 +141,6 @@ add("Spa", M, "What is the guest room phone extension for the Spa?", "73", ["72"
 add("Spa", M, "What facilities are offered at the Spa?", "Steam, Jacuzzi, gym, and temperature-controlled pool", ["Only massage rooms", "Sauna and salon only", "Gym and library"])
 add("Spa", M, "What is the signature treatment at Wildflower Hall?", "The Oberoi Signature Therapy", ["Ananda Glowing Radiance", "Gold Cellular Age Restore", "Renewed Recovery"])
 add("Spa", D, "What is the most expensive package at the Spa?", "Rejuvenate (3 hours)", ["The Oberoi Signature Therapy", "Balinese Massage", "Indian Head Massage"])
-add("Spa", D, "What are the room numbers of the Private Suites at the Spa?", "302, 303", ["402, 403", "305, 319", "119, 120"])
 add("Spa", E, "What time is the first appointment at the Spa?", "7:30 am", ["7:00 am", "8:00 am", "9:00 am"])
 add("Spa", E, "What time is the last appointment at the Spa?", "7:30 pm", ["9:00 pm", "8:00 pm", "7:00 pm"])
 add("Spa", M, "What is the timing for the complimentary yoga session?", "8:45 am till 9:30 am (subject to change per season)", ["7:00 am till 8:00 am", "6:00 am till 7:00 am", "10:00 am till 11:00 am"])
@@ -204,13 +167,10 @@ add("Food & Beverage", M, "What are the operating hours for High Tea?", "3:30 pm
 add("Food & Beverage", M, "What is the setup style of The Restaurant?", "Buffet and A la carte", ["Only A la carte", "Only Buffet", "Set menu only"])
 add("Food & Beverage", M, "What is the correct F&B department hierarchy from top to bottom?", "F&B Manager, Assistant Restaurant Manager, Supervisors, Associates, Trainees", ["Supervisors, F&B Manager, Associates, Trainees", "Associates, Supervisors, F&B Manager, Trainees", "Trainees, Associates, F&B Manager, Supervisors"])
 add("Food & Beverage", E, "What is the hotel's standard welcome drink?", "Apple Buransh Toddy", ["Lemongrass Cooler", "Himalayan Peach Fizz", "Rose Sherbet"])
-add("Food & Beverage", D, "Does the hotel accept the FHRAI card, and at what discount?", "Yes, 30% discount", ["Yes, 50% discount", "No, it is not accepted", "Yes, 15% discount"])
 add("Food & Beverage", M, "How many varieties of mouth freshener are offered to guests?", "4 - Mishri, Fennel, Clove, Cardamom", ["3 - Fennel, Clove, Mint", "5 - including Anise", "2 - Fennel and Mishri"])
-add("Food & Beverage", D, "What is the standard sugar caddy setup at breakfast tables?", "8 white sugar, 4 brown sugar, 2 stevia", ["4 white sugar, 4 brown sugar, 4 stevia", "10 white sugar, 2 brown sugar", "6 white sugar, 6 brown sugar"])
 add("Food & Beverage", M, "What is the standard napkin fold used for restaurant operations?", "Book fold, with Pyramid fold for dinner only", ["Fan fold for all meals", "Bishop's hat fold", "Rose fold"])
 add("Food & Beverage", M, "What does MICROS stand for?", "Modular Integrated Cash Register Operating System", ["Multi Integrated Cash Reporting Operations System", "Micro Restaurant Ordering System", "Managed Inventory Control and Reporting Operating System"])
 add("Food & Beverage", M, "What is the applicable tax on the sale of tobacco?", "40%", ["18%", "28%", "12%"])
-add("Food & Beverage", D, "How many fresh fruits are offered at the breakfast menu, and in what split?", "10 total - 5 cut fruit and 5 whole fruit", ["8 total - 4 cut and 4 whole", "12 total - 6 cut and 6 whole", "6 total - 3 cut and 3 whole"])
 
 # ---------------- KITCHEN ----------------
 add("Kitchen", M, "How many walk-in coolers are there in the hotel?", "5", ["3", "8", "2"])
@@ -218,11 +178,8 @@ add("Kitchen", M, "What is the brand of the walk-in coolers?", "Foster", ["Hobar
 add("Kitchen", M, "What is the brand of the gravity slicer used in the kitchen?", "Hobart", ["Foster", "Rational", "Remington"])
 add("Kitchen", M, "What is the brand of juicer used in the kitchen?", "Kuvings", ["Sujata", "Hobart", "Philips"])
 add("Kitchen", M, "What is the brand of blender used in the kitchen?", "Sujata", ["Kuvings", "Hobart", "Foster"])
-add("Kitchen", D, "What is the ideal temperature range for receiving meats and seafood?", "-8 to -15 degrees Celsius", ["2 to 5 degrees Celsius", "-20 degrees Celsius", "0 to -5 degrees Celsius"])
-add("Kitchen", D, "What is the average daily chicken consumption of the hotel?", "8 kg a day", ["15 kg a day", "5 kg a day", "20 kg a day"])
 add("Kitchen", M, "Which brand of olive oil is used in the kitchen?", "Barberra", ["President", "Morde", "Callebeault"])
 add("Kitchen", M, "Which brand of combi oven does the kitchen have?", "Rational", ["Hobart", "Foster", "Remington"])
-add("Kitchen", D, "What food cost percentage is maintained at the hotel?", "23%", ["18%", "30%", "15%"])
 add("Kitchen", D, "How many fire extinguishers are there in the kitchen?", "5", ["3", "10", "2"])
 add("Kitchen", M, "What brand of milk is used in the kitchen?", "Amul", ["Mother Dairy", "Nestle", "Britannia"])
 add("Kitchen", D, "What is the color coding used for chopping boards in the kitchen?", "Red, Brown, Yellow", ["Red, Blue, Green", "Yellow, Green, White", "Black, White, Red"])
@@ -230,8 +187,6 @@ add("Kitchen", M, "What brand of knives does the kitchen use?", "Remington", ["H
 add("Kitchen", M, "What software is used for daily ordering and requisition?", "SAP (Systems, Applications & Products in Data Processing)", ["MICROS", "OPERA", "Tally"])
 add("Kitchen", M, "What brand of chocolate is used in pastry and confectionery?", "Morde and Callebeault", ["Barberra and President", "Amul and Nestle", "Lavazza and Schweppes"])
 add("Kitchen", M, "What brand of butter is used in the French butter croissant?", "President", ["Amul", "Morde", "Barberra"])
-add("Kitchen", D, "What ppm of chlorine is maintained for knife and equipment sanitization?", "100 ppm", ["50 ppm", "200 ppm", "10 ppm"])
-add("Kitchen", D, "What are the components of the gluten-free bread mix?", "Rice flour and stabilizer", ["Wheat flour and yeast", "Ragi flour and water", "Bajra flour and oil"])
 add("Kitchen", M, "How is waste segregated in the kitchen?", "Dry, wet, steel, glass, and medical", ["Only wet and dry", "Recyclable and non-recyclable only", "Organic and inorganic only"])
 add("Kitchen", D, "What is the LQA standard time for a straight main course to be served?", "30 minutes", ["20 minutes", "45 minutes", "15 minutes"])
 add("Kitchen", M, "What breads are served during breakfast?", "Focaccia, loaf, and sourdough", ["Baguette, rye, and ciabatta", "Naan and paratha only", "Multigrain and white only"])
@@ -242,14 +197,11 @@ add("Kitchen", M, "What are the various hygiene audits conducted at the hotel?",
 # ---------------- FINANCE ----------------
 add("Finance", M, "What are the operational timings of Tijori?", "9:00 am to 9:00 pm", ["8:00 am to 8:00 pm", "10:00 am to 10:00 pm", "24 hours"])
 add("Finance", M, "Where does Tijori source its jewellery from?", "GEM Palace, Jaipur", ["Obeetee Limited", "Crystal Shop, New Delhi", "Amadeus Merchandising"])
-add("Finance", D, "What GST rates apply to different goods sold at Tijori?", "18% on apparel, 3% on jewellery, and 18%/5% on handicraft", ["18% flat across all categories", "5% flat across all categories", "12% on apparel, 3% on jewellery"])
 add("Finance", M, "What operating system is used by the Finance department?", "SAP (System Application Programme)", ["MICROS", "OPERA", "Tally ERP"])
 add("Finance", M, "What is the maximum amount above which a PAN card is required?", "Above Rs. 1,99,999", ["Above Rs. 50,000", "Above Rs. 5,00,000", "Above Rs. 99,999"])
 add("Finance", M, "Who is the contracted money exchanger for Oberoi Hotels and Resorts?", "Ebix", ["Thomas Cook", "Western Union", "American Express"])
 add("Finance", M, "What is the name of the consultancy firm that manages Tijori?", "Amadeus Merchandising, Delhi", ["GEM Palace, Jaipur", "Crystal Shop, New Delhi", "Mercury Car Rentals"])
-add("Finance", D, "What GST is applicable on room rate and meal plan bookings?", "18%, and 5% for room rates below Rs. 7500", ["12% flat rate", "28% flat rate", "5% flat rate always"])
 add("Finance", M, "Which of the following is NOT a section within the Finance department?", "Front Office Operations", ["Receiving Store", "Accounts Payable", "General Ledger"])
-add("Finance", D, "What tax is applicable on cigarettes sold at the hotel?", "40%", ["18%", "28%", "5%"])
 
 # ---------------- ENGINEERING ----------------
 add("Engineering", E, "What is the source of electricity for the hotel?", "Himachal Pradesh State Electricity Board", ["Solar power only", "A private diesel grid", "National Thermal Power Corporation"])
@@ -257,13 +209,11 @@ add("Engineering", M, "What is the emergency source of electricity at the hotel?
 add("Engineering", E, "Is the tap water at the hotel drinkable?", "Yes", ["No", "Only after boiling", "Only in the kitchen"])
 add("Engineering", M, "How is the hotel's water treated?", "Filtered, followed by chlorination and pH correction", ["Reverse osmosis only", "UV treatment only", "No treatment is needed"])
 add("Engineering", E, "At what temperature is the swimming pool water maintained?", "29 degrees Celsius", ["25 degrees Celsius", "32 degrees Celsius", "27 degrees Celsius"])
-add("Engineering", D, "What is the water holding capacity of the swimming pool?", "1 lakh litres", ["50,000 litres", "2 lakh litres", "75,000 litres"])
 add("Engineering", M, "At what temperature is 24-hour hot water circulated in guest room taps?", "50 degrees Celsius", ["40 degrees Celsius", "60 degrees Celsius", "45 degrees Celsius"])
 add("Engineering", M, "Which gas is used in the hotel's chillers?", "R22", ["R134a", "R410A", "Ammonia"])
 add("Engineering", M, "What temperature is maintained at the deep freezers?", "-20 degrees Celsius", ["-15 degrees Celsius", "-25 degrees Celsius", "-10 degrees Celsius"])
 add("Engineering", M, "What temperature is maintained at the kitchen walk-ins?", "2-5 degrees Celsius", ["0-2 degrees Celsius", "5-8 degrees Celsius", "-5 to 0 degrees Celsius"])
 add("Engineering", M, "What temperature is maintained in the Jacuzzi?", "40 degrees Celsius", ["35 degrees Celsius", "45 degrees Celsius", "38 degrees Celsius"])
-add("Engineering", D, "What is the capacity of the Sewage Treatment Plant (STP)?", "150 KL/day", ["100 KL/day", "200 KL/day", "50 KL/day"])
 
 # ---------------- HR ----------------
 add("Human Resources", E, "What are the Golden Rules of the resort?", "No smoking on shift, no drinking on duty, no stealing, no disrespect to colleagues, no unauthorized absence", ["Always wear formal attire", "Complete training within 30 days", "Report to work 15 minutes early"])
@@ -280,8 +230,6 @@ add("Security", M, "What is the telephone extension for the Security Control Roo
 add("Security", E, "What are the First Aid box locations in the hotel?", "Front Office, Time Office, and Human Resources", ["Only at the Front Desk", "Only in the kitchen", "Only in Security office"])
 add("Security", M, "What is an AED and where is it located?", "Automated External Defibrillator, located at the Concierge", ["Automatic Emergency Dialer, at the Front Desk", "Advanced Emergency Device, in the kitchen", "Automated Elevator Door, in the lobby"])
 add("Security", M, "What are the various classes of fire recognized at the hotel?", "A, B, C, D, K", ["A, B, C only", "A, B only", "A, B, C, D only"])
-add("Security", D, "How many fire extinguishers are there in the hotel overall?", "202", ["150", "100", "250"])
-add("Security", D, "How many fire hydrants are there in the hotel?", "35", ["20", "50", "15"])
 add("Security", M, "What is the role of Team A in the event of a fire?", "Fire Evacuation", ["Rescue", "Searching for people", "Backup"])
 add("Security", M, "What is the role of Team B in the event of a fire?", "Rescue", ["Fire Evacuation", "Searching for people", "Backup"])
 add("Security", M, "What is the role of Team C in the event of a fire?", "Searching for the people", ["Rescue", "Fire Evacuation", "Backup"])
@@ -290,11 +238,9 @@ add("Security", D, "Where is the Fire Evacuation Plan placed in the guest room?"
 add("Security", M, "What is the safe assembly point for guests during a fire evacuation?", "Front Lawn", ["Tennis Court", "Time Office", "Concierge"])
 add("Security", M, "What is the safe assembly point for staff during a fire evacuation?", "Tennis Court", ["Front Lawn", "Time Office", "Business Centre"])
 add("Security", M, "Where is the Fire Panel located in the hotel?", "Time Office", ["Front Desk", "Security Control Room", "Concierge"])
-add("Security", D, "At what temperature does the water sprinkler system activate?", "60-80 degrees Celsius", ["40-60 degrees Celsius", "80-100 degrees Celsius", "100-120 degrees Celsius"])
 add("Security", M, "Who is the competent authority to answer media queries at the hotel?", "General Manager", ["Security Manager", "Front Office Manager", "HR Manager"])
 add("Security", D, "Where is the nearest fire station to the hotel?", "Chota Shimla / Mall Road", ["Kufri", "Mashobra", "Naldehra"])
 add("Security", D, "Where are heat detectors used in the hotel?", "Kitchen and Banquet Pantry", ["Guest rooms only", "Lobby and Front Desk", "Corridors only"])
-add("Security", D, "At what temperature does a heat detector activate?", "80 degrees Celsius and above", ["60 degrees Celsius and above", "100 degrees Celsius and above", "40 degrees Celsius and above"])
 add("Security", M, "What is a Fire Blanket used for, and where is it located?", "A safety device to extinguish incipient fires, located in the Kitchen and Fire Trolley", ["A blanket to keep guests warm, located in guest rooms", "A decorative item in the lobby", "A cleaning cloth located in Housekeeping"])
 
 with open("questions_raw.json", "w") as f:
