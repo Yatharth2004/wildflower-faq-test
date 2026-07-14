@@ -20,39 +20,12 @@ const ExamEngine = (function () {
   }
 
   /**
-   * Selects `count` questions of a given difficulty, preferring ones not
-   * served in the candidate's previous attempts, while keeping overlap
-   * with any single previous attempt under CONFIG.maxQuestionOverlap.
+   * The bank is now a hand-curated set that exactly matches CONFIG.totalQuestions,
+   * so every attempt uses all of them — just in a freshly shuffled order, with
+   * freshly shuffled option positions, so it doesn't feel identical each time.
    */
-  function pickByDifficulty(difficulty, count, previouslyServedFlat) {
-    const pool = shuffle(QUESTION_BANK.filter(q => q.difficulty === difficulty));
-    const fresh = pool.filter(q => !previouslyServedFlat.includes(q.id));
-    const reused = pool.filter(q => previouslyServedFlat.includes(q.id));
-
-    const maxReusedAllowed = Math.floor(count * CONFIG.maxQuestionOverlap);
-    let selected = fresh.slice(0, count);
-
-    if (selected.length < count) {
-      const needed = count - selected.length;
-      selected = selected.concat(reused.slice(0, Math.min(needed, maxReusedAllowed || needed)));
-    }
-    // If still short (small bank), top up regardless of overlap rule
-    if (selected.length < count) {
-      const remaining = pool.filter(q => !selected.includes(q));
-      selected = selected.concat(remaining.slice(0, count - selected.length));
-    }
-    return selected;
-  }
-
   function selectQuestions(candidate) {
-    const prevFlat = (candidate.servedQuestionIds || []).flat();
-    const dist = CONFIG.difficultyDistribution;
-
-    const easy = pickByDifficulty("Easy", dist.Easy, prevFlat);
-    const medium = pickByDifficulty("Medium", dist.Medium, prevFlat);
-    const difficult = pickByDifficulty("Difficult", dist.Difficult, prevFlat);
-
-    let combined = shuffle([...easy, ...medium, ...difficult]);
+    let combined = shuffle(QUESTION_BANK);
 
     // Re-shuffle option order per-serve so the correct letter isn't predictable
     combined = combined.map(q => {
