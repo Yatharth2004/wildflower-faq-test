@@ -356,6 +356,37 @@ table.data-table tr:hover td{ background: rgba(185,146,75,0.06); }
 .badge-pass{ color: var(--success); font-weight: 700; }
 .badge-fail{ color: var(--danger); font-weight: 700; }
 
+/* ---------- ANSWER REVIEW ---------- */
+.review-card{
+  border: 1.5px solid rgba(31,58,46,0.1); border-radius: var(--radius-md);
+  padding: 18px 20px; margin-bottom: 14px; background: var(--white);
+}
+.review-card.correct{ border-left: 4px solid var(--success); }
+.review-card.incorrect{ border-left: 4px solid var(--danger); }
+.review-card.unanswered{ border-left: 4px solid var(--gold); }
+.review-head{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.review-qnum{ font-size: 13px; font-weight: 700; color: var(--gold-deep); letter-spacing: .05em; text-transform: uppercase; }
+.review-status{ font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px; }
+.status-correct{ background: rgba(47,107,71,0.12); color: var(--success); }
+.status-incorrect{ background: rgba(163,64,58,0.1); color: var(--danger); }
+.status-unanswered{ background: rgba(185,146,75,0.15); color: var(--gold-deep); }
+.review-question{ font-size: 16px; font-weight: 600; color: var(--charcoal); margin-bottom: 12px; }
+.review-options{ display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.review-option{
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm);
+  border: 1px solid rgba(31,58,46,0.1); font-size: 14px; background: rgba(31,58,46,0.02);
+}
+.review-option .opt-letter{
+  width: 24px; height: 24px; border-radius: 50%; background: rgba(31,58,46,0.08); color: var(--green-deep);
+  display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0;
+}
+.review-option.is-correct-answer{ background: rgba(47,107,71,0.08); border-color: rgba(47,107,71,0.35); }
+.review-option.is-wrong-selected{ background: rgba(163,64,58,0.08); border-color: rgba(163,64,58,0.35); }
+.review-tag{ margin-left: auto; font-size: 12px; font-weight: 700; }
+.review-option.is-correct-answer .review-tag{ color: var(--success); }
+.review-option.is-wrong-selected .review-tag{ color: var(--danger); }
+.review-explanation{ font-size: 13px; color: var(--charcoal-soft); background: rgba(185,146,75,0.06); padding: 10px 14px; border-radius: var(--radius-sm); }
+
 /* ---------- MISC ---------- */
 .footer-note{ text-align: center; margin-top: 40px; font-size: 12px; color: var(--charcoal-soft); opacity: .7; }
 .loader{
