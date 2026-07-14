@@ -14,7 +14,7 @@
 const SHEET_NAME = "Results";
 const ADMIN_PASSWORD_PROPERTY = "ADMIN_PASSWORD"; // optional override via Script Properties
 const DEFAULT_ADMIN_PASSWORD = "OCLD@Wildflower2026"; // keep in sync with assets/js/config.js
-const MAX_ATTEMPTS = 3;
+const MAX_ATTEMPTS = 1; // keep in sync with assets/js/config.js -> maxAttempts
 
 const COLUMNS = [
   "Timestamp", "Candidate UUID", "Full Name", "Email", "Phone", "Employee ID",
@@ -95,6 +95,7 @@ function checkAttempts(payload) {
 
   const attemptsUsed = matches.length;
   const alreadyPassed = matches.some(row => row[idx["PASS/FAIL"]] === "PASS");
+  const alreadyFailed = attemptsUsed > 0 && !alreadyPassed;
   const servedQuestionIds = matches.map(row => {
     try { return JSON.parse(row[idx["Question IDs Served"]] || "[]"); }
     catch (e) { return []; }
@@ -105,6 +106,7 @@ function checkAttempts(payload) {
     attemptsUsed,
     remainingAttempts: Math.max(0, MAX_ATTEMPTS - attemptsUsed),
     alreadyPassed,
+    alreadyFailed,
     servedQuestionIds
   };
 }
