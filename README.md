@@ -16,9 +16,11 @@ Runs entirely on **GitHub Pages (frontend) + Google Apps Script (backend) + Goog
 | Database | Google Sheets |
 | Hosting | GitHub Pages |
 
-**Exam rules baked into `config.js`:** 50 questions, 100 marks (2 per question), no negative marking, 30-minute timer with auto-submit, 100% required to pass, maximum 3 attempts per candidate (tracked by Employee ID, Email, and a generated Candidate UUID).
+**Exam rules baked into `config.js`:** 50 questions, 100 marks (2 per question), no negative marking, 30-minute timer with auto-submit, 100% required to pass, a single attempt per candidate (tracked by Employee ID, Email, and a generated Candidate UUID). The landing page is intentionally minimal — just the exam name, an honesty declaration, and the Start button, with no instructions/rules panel.
 
-The question bank (`assets/js/questions.js`) currently ships with **264 unique MCQs** generated from the uploaded Orientation Manual, spanning Company Knowledge, Guest Services, Hotel Knowledge, Front Office, Housekeeping, Activities, Spa, Food & Beverage, Kitchen, Finance, Engineering, Human Resources, and Security — comfortably above the required 200-question minimum, with a 20 Easy / 20 Medium / 10 Difficult split served per attempt.
+The question bank (`assets/js/questions.js`) is now a **hand-curated, fixed set of exactly 50 questions** (a subset selected from the larger FAQ-derived pool). Since the bank size exactly matches `totalQuestions`, every attempt uses the full set — just with a freshly shuffled question order and freshly shuffled option positions each time, so it doesn't feel identical across candidates.
+
+After submitting, candidates see a full **Answer Review** section on the result page: every question, their selected answer, the correct answer, and the explanation — with each question card colour-coded correct (green), incorrect (red), or unanswered (gold).
 
 ---
 
@@ -148,7 +150,7 @@ totalMarks: 100,
 marksPerQuestion: 2,
 durationMinutes: 30,
 passingPercentage: 100,
-maxAttempts: 3,
+maxAttempts: 1,
 difficultyDistribution: { Easy: 20, Medium: 20, Difficult: 10 },
 ```
 
@@ -185,6 +187,6 @@ Navigate to `/admin/index.html` on your deployed site (e.g. `https://<you>.githu
 The codebase is modular (separate config, question bank, and logic files) specifically to make these straightforward to add later:
 Certificates, OTP login, QR verification, email/WhatsApp result notifications, multi-language support, image/audio/video questions, multiple exam categories, advanced analytics, and AI-assisted question bank regeneration.
 
-----
+---
 
 © Wildflower Hall, An Oberoi Resort · The Oberoi Centre of Learning & Development
