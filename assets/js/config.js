@@ -35,19 +35,9 @@ const CONFIG = {
   passingPercentage: 100,   // Only a perfect score passes
   maxAttempts: 1,
 
-  // Difficulty distribution per attempt (must sum to totalQuestions).
-  // Kept intentionally weighted toward Easy/Medium — no question in the bank
-  // is tagged "Difficult" anymore, so this stays at 0 unless the bank is
-  // regenerated with a genuine hard tier later.
-  difficultyDistribution: {
-    Easy: 20,
-    Medium: 30,
-    Difficult: 0
-  },
-
-  // Maximum allowed overlap of questions between two attempts by the
-  // same candidate, expressed as a fraction (0.2 = 20%)
-  maxQuestionOverlap: 0.2,
+  // Note: with a hand-curated bank of exactly `totalQuestions` questions,
+  // every attempt simply uses the full set (freshly shuffled) — no
+  // difficulty-based sampling is needed anymore.
 
   // ---------- ADMIN ----------
   // Change this before deploying. For real production use, prefer
@@ -78,14 +68,13 @@ const CONFIG = {
   // ---------- MESSAGES ----------
   messages: {
     declaration: "I confirm that I will attempt this examination honestly.",
-    attemptsExhausted: "You have already attempted the WILDFLOWER FAQ TEST.",
-    passMessage: "Congratulations! You have successfully passed the WILDFLOWER FAQ TEST.",
-    failMessage: "Unfortunately, you did not achieve the required score of 100%."
+    attemptsExhausted: "You have already attempted the WILDFLOWER FAQ TEST. Please contact the Learning & Development Department.",
+    passMessage: "Congratulations! You have successfully passed the WILDFLOWER FAQ TEST. You are now eligible for the next stage of the OCLD selection process.",
+    failMessage: "Unfortunately, you did not achieve the required score of 100%. If attempts remain, you may attempt the examination again."
   }
 };
 
 // Freeze so exam logic files cannot accidentally mutate configuration at runtime
 Object.freeze(CONFIG);
-Object.freeze(CONFIG.difficultyDistribution);
 Object.freeze(CONFIG.departments);
 Object.freeze(CONFIG.messages);
